@@ -21,7 +21,7 @@ var config = {
 	// Heroku configuration parameters
 	heroku: {
 		mode: 'heroku',
-		port: process.env.port
+		port: process.env.PORT
 	}
 };
 
