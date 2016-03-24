@@ -1,0 +1,11 @@
+{
+  "name": "auth-wolf",
+  "version": "0.1.0",
+  "description": "Authentication layer for Wolf's applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aldo Ambrosioni",
+  "license": "MIT"
+}
