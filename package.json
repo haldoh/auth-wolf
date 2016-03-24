@@ -7,5 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Aldo Ambrosioni",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.9",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
+    "winston": "^2.2.0",
+    "winston-loggly": "^1.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haldoh/auth-wolf.git"
+  }
 }
