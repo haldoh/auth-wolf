@@ -15,13 +15,53 @@ var config = {
 	// Local configuration parameters
 	local: {
 		mode: 'local',
-		port: 3000
+		port: 3000,
+		sessionSecret: 'localSessionSecret',
+		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
+		mongo: {
+			uri: 'mongodb://localhost:27017/auth'
+		},
+		googleAuth: {
+			clientID: 'clientID',
+			clientSecret: 'clientSecret',
+			callbackURL: 'callbackURL'
+		},
+		facebookAuth: {
+			clientID: 'clientID',
+			clientSecret: 'clientSecret',
+			callbackURL: 'callbackURL'
+		},
+		twitterAuth: {
+			consumerKey: 'consumerKey',
+			consumerSecret: 'consumerSecret',
+			callbackURL: 'callbackURL'
+		}
 	},
 
 	// Heroku configuration parameters
 	heroku: {
 		mode: 'heroku',
-		port: process.env.PORT
+		port: process.env.PORT,
+		sessionSecret: process.env.SessionSecret,
+		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
+		mongo: {
+			uri: 'mongodb://' + process.env.mongoUser + ':' + process.env.mongoPassword + '@localhost:27017/auth'
+		},
+		googleAuth: {
+			clientID: 'clientID',
+			clientSecret: 'clientSecret',
+			callbackURL: 'callbackURL'
+		},
+		facebookAuth: {
+			clientID: 'clientID',
+			clientSecret: 'clientSecret',
+			callbackURL: 'callbackURL'
+		},
+		twitterAuth: {
+			consumerKey: 'consumerKey',
+			consumerSecret: 'consumerSecret',
+			callbackURL: 'callbackURL'
+		}
 	}
 };
 

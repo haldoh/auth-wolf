@@ -9,4 +9,16 @@
 /*jslint nomen:true*/
 "use strict";
 
+// Logger initialization
+require('./config/logger').initialize();
+
+// Connect to MongoDB and setup mongoose
+require('./config/mongoose')();
+
+// Create app
 var app = require('./config/express')();
+
+// Configure passport
+require('./config/passport')();
+
+module.exports = app;

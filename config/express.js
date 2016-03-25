@@ -11,10 +11,14 @@
 
 // Requires
 var express = require('express');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
 var passport = require('passport');
 var cors = require('cors');
 
+var logger = require('./logger');
 var config = require('./config');
 
 // Express config
@@ -33,7 +37,24 @@ module.exports = function () {
 		extended: true
 	}));
 
+	// Use morgan for request logs
+	app.use(morgan(config.morgan, {
+		"stream": {
+			write: function (message, encoding) {
+				logger.info(message);
+			}
+		}
+	}));
+
 	// Passport references
+	app.use(session({
+		secret: config.sessionSecret,
+		resave: false,
+		saveUninitialized: true,
+		store: new MongoStore({
+			url: config.mongo.uri
+		})
+	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
 
