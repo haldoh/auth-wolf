@@ -45,7 +45,7 @@ var config = {
 		sessionSecret: process.env.SessionSecret,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
 		mongo: {
-			uri: 'mongodb://' + process.env.mongoUser + ':' + process.env.mongoPassword + '@localhost:27017/auth'
+			uri: process.env.MONGOLAB_URI
 		},
 		googleAuth: {
 			clientID: 'clientID',
