@@ -42,7 +42,7 @@ var config = {
 	heroku: {
 		mode: 'heroku',
 		port: process.env.PORT,
-		sessionSecret: process.env.SessionSecret,
+		sessionSecret: process.env.SESSION_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
 		mongo: {
 			uri: process.env.MONGOLAB_URI
