@@ -72,6 +72,8 @@ module.exports = function () {
 	app.use('/', require('../routes/static'));
 	// Users routes
 	app.use('/users', require('../routes/users'));
+	// Authentication routes
+	app.use('/auth', require('../routes/auth'));
 
 	/*
 	 * HTTP server setup
