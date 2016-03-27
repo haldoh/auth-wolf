@@ -13,6 +13,7 @@
 var express = require('express');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var passport = require('passport');
@@ -30,6 +31,8 @@ module.exports = function () {
 
 	// Create app
 	var app = express();
+
+	app.use(cookieParser());
 
 	// Parse JSON
 	app.use(bodyParser.json());

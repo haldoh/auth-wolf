@@ -20,7 +20,7 @@ var auth = require('../controllers/auth');
  */
 router.route('/login')
 	.post(passport.authenticate('local-login', {
-		successRedirect: '/',
+		successRedirect: '/users/me',
 		failureRedirect: '/fail'
 	}));
 
@@ -28,7 +28,7 @@ router.route('/login')
  */
 router.route('/signup')
 	.post(passport.authenticate('local-signup', {
-		successRedirect: '/',
+		successRedirect: '/users/me',
 		failureRedirect: '/fail'
 	}));
 
