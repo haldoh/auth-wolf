@@ -101,8 +101,7 @@ module.exports = function () {
 
 			// Application credentials
 			clientID: config.googleAuth.clientID,
-			clientSecret: config.googleAuth.clientSecret,
-			callbackURL: config.googleAuth.callbackURL,
+			clientSecret: config.googleAuth.clientSecret
 		},
 
 		// Google sends back the token and profile

@@ -81,6 +81,55 @@ module.exports.facebookAuthCallback = function (req, res, next) {
 	})(req, res, next);
 };
 
+/* Google auth
+ */
+module.exports.googleAuth = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.googleAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	logger.debug('Google auth callback URL: ' + callbackURL);
+
+	// Call passport authentication strategy
+	return passport.authenticate('google', {
+		scope: ['profile', 'email'],
+		callbackURL: callbackURL
+	})(req, res, next);
+};
+
+/* Google callback
+ */
+module.exports.googleAuthCallback = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.googleAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	logger.debug('Google callback auth callback URL: ' + callbackURL);
+
+	// If a ref URL was given, redirect to it, otherwise redirect to user data
+	var successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
+
+	passport.authenticate('google', {
+		callbackURL: callbackURL,
+		successRedirect: successRedirect,
+		failureRedirect: '/fail'
+	})(req, res, next);
+};
+
 /* Logout
  */
 module.exports.logout = function (req, res, next) {

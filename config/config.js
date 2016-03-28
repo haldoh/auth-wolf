@@ -26,9 +26,9 @@ var config = {
 			uri: 'mongodb://localhost:27017/auth'
 		},
 		googleAuth: {
-			clientID: 'clientID',
-			clientSecret: 'clientSecret',
-			callbackURL: 'callbackURL'
+			clientID: 'process.env.GOOGLE_CLIENT_ID',
+			clientSecret: 'process.env.GOOGLE_CLIENT_SECRET',
+			callbackURL: '/auth/google/callback'
 		},
 		facebookAuth: {
 			clientID: '1164717263579046',
@@ -36,9 +36,9 @@ var config = {
 			callbackURL: '/auth/facebook/callback/'
 		},
 		twitterAuth: {
-			consumerKey: 'consumerKey',
-			consumerSecret: 'consumerSecret',
-			callbackURL: 'callbackURL'
+			consumerKey: 'process.env.TWITTER_CONSUMER_KEY',
+			consumerSecret: 'process.env.TWITTER_CONSUMER_SECRET',
+			callbackURL: '/auth/twitter/callback'
 		}
 	},
 
@@ -53,9 +53,9 @@ var config = {
 			uri: process.env.MONGOLAB_URI
 		},
 		googleAuth: {
-			clientID: 'clientID',
-			clientSecret: 'clientSecret',
-			callbackURL: 'callbackURL'
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: endpoint.heroku + '/auth/google/callback'
 		},
 		facebookAuth: {
 			clientID: process.env.FACEBOOK_APP_ID,
@@ -63,9 +63,9 @@ var config = {
 			callbackURL: endpoint.heroku + '/auth/facebook/callback'
 		},
 		twitterAuth: {
-			consumerKey: 'consumerKey',
-			consumerSecret: 'consumerSecret',
-			callbackURL: 'callbackURL'
+			consumerKey: process.env.TWITTER_CONSUMER_KEY,
+			consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+			callbackURL: endpoint.heroku + '/auth/twitter/callback'
 		}
 	}
 };

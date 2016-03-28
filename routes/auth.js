@@ -42,6 +42,16 @@ router.route('/facebook/callback')
 // GET - Facebook authentication callback
 	.get(auth.facebookAuthCallback);
 
+/* Google auth
+*/
+router.route('/google')
+// GET - Google authentication
+	.get(auth.googleAuth);
+
+router.route('/google/callback')
+// GET - Google authentication callback
+	.get(auth.googleAuthCallback);
+
 /* Logout
  */
 router.route('/logout')
