@@ -27,8 +27,8 @@ var config = {
 			callbackURL: 'callbackURL'
 		},
 		facebookAuth: {
-			clientID: process.env.FACEBOOK_APP_ID,
-			clientSecret: process.env.FACEBOOK_APP_SECRET,
+			clientID: '1164717263579046',
+			clientSecret: 'c42f6d29e918e065f9c5ff8c4f4fd3ae',
 			callbackURL: 'http://192.168.0.8:3000/auth/facebook/callback/'
 		},
 		twitterAuth: {
