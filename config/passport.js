@@ -107,6 +107,9 @@ module.exports = function () {
 		// Google sends back the token and profile
 		function (token, refreshToken, profile, done) {
 
+			console.log(config.googleAuth.clientID);
+			console.log(config.googleAuth.clientSecret);
+
 			// Check if the Google ID is already in the DB
 			user.getByGoogleId(profile.id, function (err, usr) {
 
