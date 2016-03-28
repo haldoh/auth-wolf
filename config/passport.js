@@ -107,9 +107,6 @@ module.exports = function () {
 		// Google sends back the token and profile
 		function (token, refreshToken, profile, done) {
 
-			console.log(config.googleAuth.clientID);
-			console.log(config.googleAuth.clientSecret);
-
 			// Check if the Google ID is already in the DB
 			user.getByGoogleId(profile.id, function (err, usr) {
 
@@ -166,8 +163,7 @@ module.exports = function () {
 
 			// Application credentials
 			consumerKey: config.twitterAuth.consumerKey,
-			consumerSecret: config.twitterAuth.consumerSecret,
-			callbackURL: config.twitterAuth.callbackURL
+			consumerSecret: config.twitterAuth.consumerSecret
 		},
 
 		// Twitter sends back the token and profile

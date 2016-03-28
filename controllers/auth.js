@@ -130,6 +130,54 @@ module.exports.googleAuthCallback = function (req, res, next) {
 	})(req, res, next);
 };
 
+/* Twitter auth
+ */
+module.exports.twitterAuth = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.twitterAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	logger.debug('Twitter auth callback URL: ' + callbackURL);
+
+	// Call passport authentication strategy
+	return passport.authenticate('twitter', {
+		callbackURL: callbackURL
+	})(req, res, next);
+};
+
+/* Twitter callback
+ */
+module.exports.twitterAuthCallback = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.twitterAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	logger.debug('Twitter callback auth callback URL: ' + callbackURL);
+
+	// If a ref URL was given, redirect to it, otherwise redirect to user data
+	var successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
+
+	passport.authenticate('twitter', {
+		callbackURL: callbackURL,
+		successRedirect: successRedirect,
+		failureRedirect: '/fail'
+	})(req, res, next);
+};
+
 /* Logout
  */
 module.exports.logout = function (req, res, next) {

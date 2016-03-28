@@ -52,6 +52,16 @@ router.route('/google/callback')
 // GET - Google authentication callback
 	.get(auth.googleAuthCallback);
 
+/* Twitter auth
+*/
+router.route('/twitter')
+// GET - Twitter authentication
+	.get(auth.twitterAuth);
+
+router.route('/twitter/callback')
+// GET - Twitter authentication callback
+	.get(auth.twitterAuthCallback);
+
 /* Logout
  */
 router.route('/logout')
