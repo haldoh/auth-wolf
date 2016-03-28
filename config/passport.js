@@ -120,8 +120,10 @@ module.exports = function () {
 					return done(null, usr);
 
 				// Store new user
-				else
-					user.newGoogleUser(profile.id, token, profile.emails[0].value, profile.displayName, done);
+				else {
+					var email = profile.emails && 0 in profile.emails ? profile.emails[0].value : null;
+					user.newGoogleUser(profile.id, token, email, profile.displayName, done);
+				}
 			});
 		}));
 
@@ -131,8 +133,7 @@ module.exports = function () {
 
 			// Application credentials
 			clientID: config.facebookAuth.clientID,
-			clientSecret: config.facebookAuth.clientSecret,
-			callbackURL: config.facebookAuth.callbackURL
+			clientSecret: config.facebookAuth.clientSecret
 		},
 
 		// Facebook sends back the token and profile
@@ -150,8 +151,10 @@ module.exports = function () {
 					return done(null, usr);
 
 				// Store new user
-				else
-					user.newFacebookUser(profile.id, token, profile.emails[0].value, profile.name.givenName, done);
+				else {
+					var email = profile.emails && 0 in profile.emails ? profile.emails[0].value : null;
+					user.newFacebookUser(profile.id, token, email, profile.displayName, done);
+				}
 			});
 		}));
 

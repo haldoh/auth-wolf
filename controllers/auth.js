@@ -9,6 +9,11 @@
 /*jslint nomen:true*/
 "use strict";
 
+// Requires
+var passport = require('passport');
+
+var config = require('../config/config');
+
 /* Check if user is authenticated
  */
 module.exports.isAuthenticated = function (req, res, next) {
@@ -24,6 +29,51 @@ module.exports.authInfo = function (req, res, next) {
 	return res.status(200).send({
 		userId: req.user.id
 	});
+};
+
+/* Facebook auth
+ */
+module.exports.facebookAuth = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.facebookAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	// Call passport authentication strategy
+	return passport.authenticate('facebook', {
+		scope: 'email',
+		callbackURL: callbackURL
+	})(req, res, next);
+};
+
+/* Facebook callback
+ */
+module.exports.facebookAuthCallback = function (req, res, next) {
+
+	// Try to get ref URL from request
+	var refUrl = req.query.hasOwnProperty('refUrl') ? encodeURIComponent(req.query.refUrl) : null;
+
+	// Get base callback URL
+	var callbackURL = config.facebookAuth.callbackURL;
+
+	// Attach ref for later redirect if provided
+	if (refUrl)
+		callbackURL += '?refUrl=' + refUrl;
+
+	// If a ref URL was given, redirect to it, otherwise redirect to user data
+	var successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
+
+	passport.authenticate('facebook', {
+		callbackURL: callbackURL,
+		successRedirect: successRedirect,
+		failureRedirect: '/fail'
+	})(req, res, next);
 };
 
 /* Logout

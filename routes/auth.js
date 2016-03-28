@@ -32,6 +32,16 @@ router.route('/signup')
 		failureRedirect: '/fail'
 	}));
 
+/* Facebook auth
+*/
+router.route('/facebook')
+// GET - Facebook authentication
+	.get(auth.facebookAuth);
+
+router.route('/facebook/callback')
+// GET - Facebook authentication callback
+	.get(auth.facebookAuthCallback);
+
 /* Logout
  */
 router.route('/logout')
