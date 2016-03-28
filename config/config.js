@@ -29,7 +29,7 @@ var config = {
 		facebookAuth: {
 			clientID: '1164717263579046',
 			clientSecret: 'c42f6d29e918e065f9c5ff8c4f4fd3ae',
-			callbackURL: 'http://192.168.0.8:3000/auth/facebook/callback/'
+			callbackURL: '/auth/facebook/callback/'
 		},
 		twitterAuth: {
 			consumerKey: 'consumerKey',
@@ -41,6 +41,7 @@ var config = {
 	// Heroku configuration parameters
 	heroku: {
 		mode: 'heroku',
+		endpoint: 'https://auth-wolf.herokuapp.com',
 		port: process.env.PORT,
 		sessionSecret: process.env.SESSION_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
@@ -55,7 +56,7 @@ var config = {
 		facebookAuth: {
 			clientID: process.env.FACEBOOK_APP_ID,
 			clientSecret: process.env.FACEBOOK_APP_SECRET,
-			callbackURL: '/auth/facebook/callback'
+			callbackURL: config.heroku.endpoint + '/auth/facebook/callback'
 		},
 		twitterAuth: {
 			consumerKey: 'consumerKey',
