@@ -9,6 +9,10 @@
 /*jslint nomen:true*/
 "use strict";
 
+var endpoint = {
+	heroku: 'https://auth-wolf.herokuapp.com'
+};
+
 // Configuration object
 var config = {
 
@@ -41,7 +45,7 @@ var config = {
 	// Heroku configuration parameters
 	heroku: {
 		mode: 'heroku',
-		endpoint: 'https://auth-wolf.herokuapp.com',
+		endpoint: endpoint.heroku,
 		port: process.env.PORT,
 		sessionSecret: process.env.SESSION_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
@@ -56,7 +60,7 @@ var config = {
 		facebookAuth: {
 			clientID: process.env.FACEBOOK_APP_ID,
 			clientSecret: process.env.FACEBOOK_APP_SECRET,
-			callbackURL: config.heroku.endpoint + '/auth/facebook/callback'
+			callbackURL: endpoint.heroku + '/auth/facebook/callback'
 		},
 		twitterAuth: {
 			consumerKey: 'consumerKey',
