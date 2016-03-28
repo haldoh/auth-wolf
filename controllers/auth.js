@@ -13,6 +13,7 @@
 var passport = require('passport');
 
 var config = require('../config/config');
+var logger = require('../config/logger');
 
 /* Check if user is authenticated
  */
@@ -45,6 +46,8 @@ module.exports.facebookAuth = function (req, res, next) {
 	if (refUrl)
 		callbackURL += '?refUrl=' + refUrl;
 
+	logger.debug('Facebook auth callback URL: ' + callbackURL);
+
 	// Call passport authentication strategy
 	return passport.authenticate('facebook', {
 		scope: 'email',
@@ -65,6 +68,8 @@ module.exports.facebookAuthCallback = function (req, res, next) {
 	// Attach ref for later redirect if provided
 	if (refUrl)
 		callbackURL += '?refUrl=' + refUrl;
+
+	logger.debug('Facebook callback auth callback URL: ' + callbackURL);
 
 	// If a ref URL was given, redirect to it, otherwise redirect to user data
 	var successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
