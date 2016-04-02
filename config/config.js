@@ -25,6 +25,9 @@ var config = {
 		mongo: {
 			uri: 'mongodb://localhost:27017/auth'
 		},
+		redis: {
+			uri: 'redis://127.0.0.1:6379/'
+		},
 		googleAuth: {
 			clientID: 'process.env.GOOGLE_CLIENT_ID',
 			clientSecret: 'process.env.GOOGLE_CLIENT_SECRET',
@@ -51,6 +54,9 @@ var config = {
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
 		mongo: {
 			uri: process.env.MONGOLAB_URI
+		},
+		redis: {
+			uri: process.env.REDIS_URL
 		},
 		googleAuth: {
 			clientID: process.env.GOOGLE_CLIENT_ID,

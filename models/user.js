@@ -58,6 +58,7 @@ module.exports.newLocalUser = function (email, password, callback) {
 
 	// Store data in new user
 	newUser.email = email;
+	newUser.displayName = email.split('@')[0];
 	newUser.password = newUser.generateHash(password);
 
 	// Save user
@@ -76,6 +77,7 @@ module.exports.newFacebookUser = function (id, token, email, name, callback) {
 	newUser.facebook.token = token;
 	newUser.facebook.email = email;
 	newUser.facebook.name = name;
+	newUser.displayName = name;
 
 	// Save user
 	newUser.save(callback);
@@ -93,6 +95,7 @@ module.exports.newGoogleUser = function (id, token, email, name, callback) {
 	newUser.google.token = token;
 	newUser.google.email = email;
 	newUser.google.name = name;
+	newUser.displayName = name;
 
 	// Save user
 	newUser.save(callback);
@@ -110,6 +113,7 @@ module.exports.newTwitterUser = function (id, token, displayName, username, call
 	newUser.twitter.token = token;
 	newUser.twitter.displayName = displayName;
 	newUser.twitter.username = username;
+	newUser.displayName = displayName;
 
 	// Save user
 	newUser.save(callback);

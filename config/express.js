@@ -12,7 +12,7 @@
 // Requires
 var express = require('express');
 var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
+var redisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
@@ -54,8 +54,8 @@ module.exports = function () {
 		secret: config.sessionSecret,
 		resave: false,
 		saveUninitialized: true,
-		store: new MongoStore({
-			url: config.mongo.uri
+		store: new redisStore({
+			url: config.redis.uri
 		})
 	}));
 	app.use(passport.initialize());

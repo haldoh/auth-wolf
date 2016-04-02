@@ -52,7 +52,7 @@ module.exports = function () {
 					return done(err);
 
 				// No user found
-				if (!user)
+				if (!usr)
 					return done(null, false);
 
 				// User found but wrong password
@@ -64,7 +64,6 @@ module.exports = function () {
 			});
 
 		}));
-
 
 	/* Local signup
 	 */

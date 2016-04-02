@@ -23,6 +23,9 @@ var UserSchema = new mongoose.Schema({
 	password: {
 		type: String
 	},
+	displayName: {
+		type: String
+	},
 	facebook: {
 		id: {
 			type: String,
