@@ -76,9 +76,10 @@ module.exports.facebookAuthCallback = function (req, res, next) {
 
 	passport.authenticate('facebook', {
 		callbackURL: callbackURL,
-		successRedirect: successRedirect,
 		failureRedirect: '/fail'
-	})(req, res, next);
+	}, function (req, res, next) {
+		res.redirect(successRedirect);
+	});
 };
 
 /* Google auth
