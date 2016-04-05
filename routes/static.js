@@ -16,5 +16,6 @@ var stat = require('../controllers/static');
 router.route('/')
 	// GET - default message
 	.get(stat.defaultMessage);
+	
 
 module.exports = router;
