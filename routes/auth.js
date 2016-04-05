@@ -40,7 +40,7 @@ router.route('/facebook')
 
 router.route('/facebook/callback')
 // GET - Facebook authentication callback
-	.get(auth.facebookAuthCallback);
+	.get(auth.facebookAuthCallback, auth.loggedRedirect);
 
 /* Google auth
 */

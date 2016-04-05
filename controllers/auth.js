@@ -72,14 +72,12 @@ module.exports.facebookAuthCallback = function (req, res, next) {
 	logger.debug('Facebook callback auth callback URL: ' + callbackURL);
 
 	// If a ref URL was given, redirect to it, otherwise redirect to user data
-	var successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
+	req.successRedirect = refUrl ? decodeURIComponent(refUrl) : '/users/me';
 
 	passport.authenticate('facebook', {
 		callbackURL: callbackURL,
 		failureRedirect: '/fail'
-	}, function (req, res, next) {
-		res.redirect(successRedirect);
-	});
+	})(req, res, next);
 };
 
 /* Google auth
@@ -177,6 +175,12 @@ module.exports.twitterAuthCallback = function (req, res, next) {
 		successRedirect: successRedirect,
 		failureRedirect: '/fail'
 	})(req, res, next);
+};
+
+/* Redirection after external auth
+ */
+module.exports.loggedRedirect = function (req, res, next) {
+	res.redirect(req.successRedirect);
 };
 
 /* Logout
