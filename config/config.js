@@ -10,6 +10,7 @@
 "use strict";
 
 var endpoint = {
+	local: 'http://192.168.0.8:3000',
 	heroku: 'https://auth-wolf.herokuapp.com'
 };
 
@@ -19,6 +20,8 @@ var config = {
 	// Local configuration parameters
 	local: {
 		mode: 'local',
+		endpoint: endpoint.local,
+		cookieDomain: '192.168.0.8',
 		port: 3000,
 		sessionSecret: 'localSessionSecret',
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
@@ -49,6 +52,7 @@ var config = {
 	heroku: {
 		mode: 'heroku',
 		endpoint: endpoint.heroku,
+		cookieDomain: '.herokuapp.com',
 		port: process.env.PORT,
 		sessionSecret: process.env.SESSION_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',

@@ -56,7 +56,11 @@ module.exports = function () {
 		saveUninitialized: true,
 		store: new redisStore({
 			url: config.redis.uri
-		})
+		}),
+		cookie: {
+			path: '/',
+			domain: config.cookieDomain
+		}
 	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
