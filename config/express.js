@@ -71,7 +71,12 @@ module.exports = function () {
 	 */
 
 	// Enable cross-domain requests for all routes
-	app.use(cors());
+	app.use(cors({
+		origin: '*',
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+		credentials: true,
+		allowedHeaders: 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+	}));
 
 	// Documentation - static
 	app.use('/docs', express.static('docs'));
