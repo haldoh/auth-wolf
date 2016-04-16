@@ -180,16 +180,6 @@ module.exports.twitterAuthCallback = function (req, res, next) {
 /* Redirection after external auth
  */
 module.exports.loggedRedirect = function (req, res, next) {
-
-	// Get logged user
-	var usr = req.user.toObject();
-	
-	// Remove sensitive information
-	delete usr.password;
-
-	// Set header
-	res.header('x-wolf-user', JSON.stringify(usr));
-
 	// Redirect
 	res.redirect(req.successRedirect);
 };

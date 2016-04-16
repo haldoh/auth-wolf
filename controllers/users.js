@@ -10,7 +10,7 @@
 "use strict";
 
 module.exports.loggedUserData = function (req, res, next) {
-	
+
 	// Get logged user
 	var usr = req.user.toObject();
 	
