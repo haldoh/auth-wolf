@@ -16,6 +16,6 @@ var users = require('../controllers/users');
 
 router.route('/me')
 // GET - get data about the logged user
-	.get(auth.isAuthenticated, users.loggedUserData);
+	.get(auth.checkToken, auth.isAuthenticated, users.loggedUserData);
 
 module.exports = router;

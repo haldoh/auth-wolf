@@ -25,6 +25,7 @@ var config = {
 		port: 3000,
 		sessionSecret: 'localSessionSecret',
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
+		token: 'localhost_web_token',
 		mongo: {
 			uri: 'mongodb://localhost:27017/auth'
 		},
@@ -56,6 +57,7 @@ var config = {
 		port: process.env.PORT,
 		sessionSecret: process.env.SESSION_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
+		token: process.env.AUTH_TOKEN,
 		mongo: {
 			uri: process.env.MONGOLAB_URI
 		},

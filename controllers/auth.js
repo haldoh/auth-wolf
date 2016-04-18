@@ -18,10 +18,31 @@ var logger = require('../config/logger');
 /* Check if user is authenticated
  */
 module.exports.isAuthenticated = function (req, res, next) {
-	if (req.isAuthenticated())
+	if (req.isAuthenticated()) {
+		logger.debug('Request authorized from user ' + req.user.id);
 		return next();
-	else
+	} else {
+		logger.warn('Request not authorized from unregistered user - headers: ' + JSON.stringify(req.headers));
 		return res.status(401).send('Unauthorized');
+	}
+};
+
+/* Check request token
+ */
+module.exports.checkToken = function (req, res, next) {
+
+	// Try to get headers required for calls
+	var platform = req.headers.hasOwnProperty('x-wolf-auth-platform') ? req.headers['x-wolf-auth-platform'] : -1;
+	var token = req.headers.hasOwnProperty('x-wolf-auth-token') ? req.headers['x-wolf-auth-token'] : -1;
+
+	// Check token
+	if (platform !== -1 && token !== -1 && token === config.token) {
+		logger.debug('Request authorized from platform ' + platform);
+		next();
+	} else {
+		logger.warn('Request not authorized - headers: ' + JSON.stringify(req.headers));
+		res.status(401).send('Missing and/or wrong authorization token from request header.');
+	}
 };
 
 /* Send some auth information
