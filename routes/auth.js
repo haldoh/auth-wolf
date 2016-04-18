@@ -65,7 +65,7 @@ router.route('/twitter/callback')
 /* Session setup
  */
 router.route('/session_setup')
-	.post(auth.session_setup);
+	.post(auth.sessionSetup);
 
 /* Logout
  */
