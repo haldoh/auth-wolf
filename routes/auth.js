@@ -36,7 +36,7 @@ router.route('/signup')
 */
 router.route('/facebook')
 // GET - Facebook authentication
-	.get(auth.checkToken, auth.facebookAuth);
+	.get(auth.facebookAuth);
 
 router.route('/facebook/callback')
 // GET - Facebook authentication callback
@@ -46,7 +46,7 @@ router.route('/facebook/callback')
 */
 router.route('/google')
 // GET - Google authentication
-	.get(auth.checkToken, auth.googleAuth);
+	.get(auth.googleAuth);
 
 router.route('/google/callback')
 // GET - Google authentication callback
@@ -56,7 +56,7 @@ router.route('/google/callback')
 */
 router.route('/twitter')
 // GET - Twitter authentication
-	.get(auth.checkToken, auth.twitterAuth);
+	.get(auth.twitterAuth);
 
 router.route('/twitter/callback')
 // GET - Twitter authentication callback
