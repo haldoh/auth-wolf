@@ -62,6 +62,11 @@ router.route('/twitter/callback')
 // GET - Twitter authentication callback
 	.get(auth.twitterAuthCallback);
 
+/* Session setup
+ */
+router.route('/session_setup')
+	.post(auth.session_setup);
+
 /* Logout
  */
 router.route('/logout')

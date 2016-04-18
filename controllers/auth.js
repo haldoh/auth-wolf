@@ -76,7 +76,6 @@ module.exports.facebookAuthCallback = function (req, res, next) {
 
 	passport.authenticate('facebook', {
 		callbackURL: callbackURL,
-		successRedirect: req.successRedirect,
 		failureRedirect: '/fail'
 	})(req, res, next);
 };
@@ -125,7 +124,6 @@ module.exports.googleAuthCallback = function (req, res, next) {
 
 	passport.authenticate('google', {
 		callbackURL: callbackURL,
-		successRedirect: successRedirect,
 		failureRedirect: '/fail'
 	})(req, res, next);
 };
@@ -173,16 +171,67 @@ module.exports.twitterAuthCallback = function (req, res, next) {
 
 	passport.authenticate('twitter', {
 		callbackURL: callbackURL,
-		successRedirect: successRedirect,
 		failureRedirect: '/fail'
 	})(req, res, next);
 };
 
 /* Redirection after external auth
  */
-module.exports.loggedRedirect = function (req, res, next) {
+module.exports.extAuthRedirect = function (req, res, next) {
+
+	var splitUrl;
+
+	// Append to redirect URL a token to automatically login
+	if (req.successRedirect.indexOf('?') !== -1) {
+		
+		// Redirect URL already has query, check hash
+		if (req.successRedirect.indexOf('#') !== -1) {
+
+			// Redirect URL also has hash
+			splitUrl = req.successRedirect.split('#');
+			req.successRedirect = splitUrl[0] + '&token=' + req.user.id + '#' + splitUrl[1];
+		} else {
+
+			// No hash
+			req.successRedirect += '&token=' + req.user.id;
+		}
+	} else {
+
+		// Redirect URL has no query, check hash
+		if (req.successRedirect.indexOf('#') !== -1) {
+
+			// Redirect URL has hash
+			splitUrl = req.successRedirect.split('#');
+			req.successRedirect = splitUrl[0] + '?token=' + req.user.id + '#' + splitUrl[1];
+		} else {
+
+			// No hash
+			req.successRedirect += '?token=' + req.user.id;
+		}
+	}
+
 	// Redirect
 	res.redirect(req.successRedirect);
+};
+
+/* Session setup
+ * To avoid security risks, this call should be protected with an API token
+ * so that only other authorized services can use it
+ */
+module.exports.sessionSetup = function (req, res, next) {
+
+	// Get token parameter
+	req.wolfToken = req.body.hasOwnProperty('token') ? req.body.token : -1;
+
+	// Trick passport into thinking that we have user and password
+	req.body.username = 'user';
+	req.body.password = 'pwd';
+
+	// Log in user
+	passport.authenticate('session-setup', {
+		successRedirect: '/users/me',
+		failureRedirect: '/fail'
+	})(req, res, next);
 };
 
 /* Logout

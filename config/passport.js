@@ -62,7 +62,6 @@ module.exports = function () {
 				// Login successfull
 				return done(null, usr);
 			});
-
 		}));
 
 	/* Local signup
@@ -182,6 +181,30 @@ module.exports = function () {
 				// Store new user
 				else
 					user.newTwitterUser(profile.id, token, profile.displayName, profile.userName, done);
+			});
+		}));
+
+	/* Session setup
+	 */
+	passport.use('session-setup', new LocalStrategy({
+
+			passReqToCallback: true // Pass back the entire request to the callback
+		},
+		function (req, username, password, done) {
+
+			// Find the user using email
+			user.getById(req.wolfToken, function (err, usr) {
+				
+				// An error occurred
+				if (err)
+					return done(err);
+
+				// No user found
+				if (!usr)
+					return done(null, false);
+
+				// Login successfull
+				return done(null, usr);
 			});
 		}));
 };
