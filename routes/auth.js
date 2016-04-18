@@ -40,7 +40,7 @@ router.route('/facebook')
 
 router.route('/facebook/callback')
 // GET - Facebook authentication callback
-	.get(auth.facebookAuthCallback);
+	.get(auth.facebookAuthCallback, auth.extAuthRedirect);
 
 /* Google auth
 */
@@ -50,7 +50,7 @@ router.route('/google')
 
 router.route('/google/callback')
 // GET - Google authentication callback
-	.get(auth.googleAuthCallback);
+	.get(auth.googleAuthCallback, auth.extAuthRedirect);
 
 /* Twitter auth
 */
@@ -60,7 +60,7 @@ router.route('/twitter')
 
 router.route('/twitter/callback')
 // GET - Twitter authentication callback
-	.get(auth.twitterAuthCallback);
+	.get(auth.twitterAuthCallback, auth.extAuthRedirect);
 
 /* Session setup
  */
