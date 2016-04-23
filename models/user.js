@@ -10,7 +10,11 @@
 "use strict";
 
 // Requires
+var jwt = require('jsonwebtoken');
+
 var User = require('mongoose').model('User');
+
+var config = require('../config/config');
 
 // Get a user based on its ID
 module.exports.getById = function (id, callback) {

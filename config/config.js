@@ -24,6 +24,7 @@ var config = {
 		cookieDomain: '192.168.0.8',
 		port: 3000,
 		sessionSecret: 'localSessionSecret',
+		jwtSecret: 'localJwtSecret',
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
 		token: 'localhost_web_token',
 		mongo: {
@@ -56,6 +57,7 @@ var config = {
 		cookieDomain: '.herokuapp.com',
 		port: process.env.PORT,
 		sessionSecret: process.env.SESSION_SECRET,
+		jwtSecret: process.env.JWT_SECRET,
 		morgan: 'REQ :remote-addr - :remote-user  ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time',
 		token: process.env.AUTH_TOKEN,
 		mongo: {

@@ -12,8 +12,11 @@
 // Requires
 var passport = require('passport');
 
+var auth = require('../models/auth');
+
 var config = require('../config/config');
 var logger = require('../config/logger');
+var error = require('../config/error');
 
 /* Check if user is authenticated
  */
@@ -27,9 +30,9 @@ module.exports.isAuthenticated = function (req, res, next) {
 	}
 };
 
-/* Check request token
+/* Check API request token
  */
-module.exports.checkToken = function (req, res, next) {
+module.exports.checkApiToken = function (req, res, next) {
 
 	// Try to get headers required for calls
 	var platform = req.headers.hasOwnProperty('x-wolf-auth-platform') ? req.headers['x-wolf-auth-platform'] : -1;
@@ -38,10 +41,35 @@ module.exports.checkToken = function (req, res, next) {
 	// Check token
 	if (platform !== -1 && token !== -1 && token === config.token) {
 		logger.debug('Request authorized from platform ' + platform);
-		next();
-	} else {
-		logger.warn('Request not authorized - headers: ' + JSON.stringify(req.headers));
-		res.status(401).send('Missing and/or wrong authorization token from request header.');
+		return next();
+	} else
+		return error.send('401', '3', 'warn', res, 'controllers.auth.checkApiToken', 'API tokens failed to validate: ' + JSON.stringify(req.headers));
+};
+
+/* Check user request token
+ */
+module.exports.checkUserToken = function (req, res, next) {
+
+	// Try to get headers required for calls
+	var userToken = req.headers.hasOwnProperty('x-wolf-user-token') ? req.headers['x-wolf-user-token'] : -1;
+
+	// Check token
+	if (userToken === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.checkUserToken', 'Parameter missing from call: ' + JSON.stringify(req.headers));
+	else {
+
+		// Check token
+		return auth.verifyUserToken(userToken, function (tokenErr, decodedToken) {
+			if (tokenErr)
+				return error.send('401', '2', 'warn', res, 'controllers.user.checkUserToken', 'Token verification failed: ' + JSON.stringify(tokenErr));
+			else {
+
+				// Token valid, go ahead
+				logger.debug('Request authorized from user ' + decodedToken.id);
+				req.tokenUser = decodedToken;
+				return next();
+			}
+		});
 	}
 };
 

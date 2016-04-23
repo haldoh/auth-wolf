@@ -15,22 +15,19 @@ var router = express.Router();
 var passport = require('passport');
 
 var auth = require('../controllers/auth');
+var users = require('../controllers/users');
 
-/* Local login
+/* Local signin
  */
-router.route('/login')
-	.post(auth.checkToken, passport.authenticate('local-login', {
-		successRedirect: '/users/me',
-		failureRedirect: '/fail'
-	}));
+router.route('/local/signin')
+	// POST - Get auth token using local credentials
+	.post(auth.checkApiToken, users.localAuth);
 
 /* Local signup
  */
-router.route('/signup')
-	.post(auth.checkToken, passport.authenticate('local-signup', {
-		successRedirect: '/users/me',
-		failureRedirect: '/fail'
-	}));
+router.route('/local/signup')
+	// POST - Create new user and get auth token
+	.post(auth.checkApiToken, users.newLocalUser);
 
 /* Facebook auth
 */
@@ -65,16 +62,16 @@ router.route('/twitter/callback')
 /* Session setup
  */
 router.route('/session_setup')
-	.post(auth.checkToken, auth.sessionSetup);
+	.post(auth.checkApiToken, auth.sessionSetup);
 
 /* Logout
  */
 router.route('/logout')
-	.get(auth.checkToken, auth.logout);
+	.get(auth.checkApiToken, auth.logout);
 
 /* Check if logged in
  */
 router.route('/test_auth')
-	.get(auth.checkToken, auth.isAuthenticated, auth.authInfo);
+	.get(auth.checkApiToken, auth.isAuthenticated, auth.authInfo);
 
 module.exports = router;

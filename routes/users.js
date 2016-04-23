@@ -14,8 +14,8 @@ var router = require('express').Router();
 var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 
-router.route('/me')
-// GET - get data about the logged user
-	.get(auth.checkToken, auth.isAuthenticated, users.loggedUserData);
+router.route('/:id')
+	// GET - get data about a user
+	.get(auth.checkApiToken, auth.checkUserToken, users.getUserById);
 
 module.exports = router;
