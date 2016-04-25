@@ -10,7 +10,6 @@
 "use strict";
 
 // Requires
-var passport = require('passport');
 
 var auth = require('../models/auth');
 
