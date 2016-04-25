@@ -18,7 +18,4 @@ require('./config/mongoose')();
 // Create app
 var app = require('./config/express')();
 
-// Configure passport
-require('./config/passport')();
-
 module.exports = app;

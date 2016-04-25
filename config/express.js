@@ -11,12 +11,9 @@
 
 // Requires
 var express = require('express');
-var session = require('express-session');
-var redisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var passport = require('passport');
 var cors = require('cors');
 
 var logger = require('./logger');
@@ -48,19 +45,6 @@ module.exports = function () {
 			}
 		}
 	}));
-
-	// Passport references
-	app.use(session({
-		secret: config.sessionSecret,
-		resave: false,
-		saveUninitialized: true,
-		store: new redisStore({
-			url: config.redis.uri
-		})
-	}));
-	app.use(passport.initialize());
-	app.use(passport.session());
-
 
 	/*
 	 * Routes
