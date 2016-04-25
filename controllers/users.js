@@ -50,6 +50,38 @@ module.exports.getUserById = function (req, res, next) {
 	}
 };
 
+/** Get a user by its auth token
+ */
+module.exports.getTokenUser = function (req, res, next) {
+
+	// Get ID from req
+	var userId = req.tokenUser && req.tokenUser.hasOwnProperty('id') ? req.tokenUser.id : -1;
+
+	if (userId === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.getTokenUser', 'Parameter missing from call: ' + JSON.stringify(req.params));
+	else {
+
+		// Retrieve user
+		return user.getById(userId, function (usrErr, usr) {
+			if (usrErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.getTokenUser', 'Error retrieving user from DB : ' + JSON.stringify(usrErr));
+			else if (!usr)
+				return error.send('404', '1', 'warn', res, 'controllers.user.getTokenUser', 'Requested user not found: ' + userId);
+			else {
+
+				// Turn to normal JSON
+				var resUser = usr.toObject();
+
+				// Passowrd digest is not needed
+				delete resUser.password;
+
+				// Return user
+				return res.send(resUser);
+			}
+		});
+	}
+};
+
 /** Authenticate a user with email and password
  */
 module.exports.localAuth = function (req, res, next) {
@@ -115,6 +147,177 @@ module.exports.newLocalUser = function (req, res, next) {
 					return res.send({
 						token: token
 					});
+				});
+			}
+		});
+	}
+};
+
+/** Facebook user signin
+ *  Check if given Facebook user exists, create it if missing, and return auth token
+ */
+module.exports.facebookSignin = function (req, res, next) {
+
+	// Get data from request
+	var id = req.body.hasOwnProperty('id') ? req.body.id : -1;
+	var token = req.body.hasOwnProperty('token') ? req.body.token : -1;
+	var email = req.body.hasOwnProperty('email') ? req.body.email : -1;
+	var name = req.body.hasOwnProperty('name') ? req.body.name : -1;
+
+	// Check data
+	if (id === -1 || token === -1 || email === -1 || name === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.facebookSignin', 'Parameter missing from call: ' + JSON.stringify(req.body));
+	else {
+
+		// Check if user already exists
+		return user.getByFacebookId(id, function (checkErr, checkUsr) {
+			if (checkErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error checking user: ' + JSON.stringify(checkErr));
+			else if (checkUsr) {
+
+				// Store new Facebook token
+				return user.updateFacebookToken(id, token, function (updErr, updRes) {
+					if (updErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error updating user token: ' + JSON.stringify(updErr));
+					else {
+
+						// User already exists, return auth token
+						return auth.generateUserToken(checkUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
+				});
+			} else {
+
+				// New user, store it
+				return user.newFacebookUser(id, token, email, name, function (newErr, newUsr) {
+					if (newErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error creating new user: ' + JSON.stringify(newErr));
+					else {
+
+						// User created, return auth token
+						return auth.generateUserToken(newUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
+				});
+			}
+		});
+	}
+};
+
+/** Google user signin
+ *  Check if given Google user exists, create it if missing, and return auth token
+ */
+module.exports.googleSignin = function (req, res, next) {
+
+	// Get data from request
+	var id = req.body.hasOwnProperty('id') ? req.body.id : -1;
+	var token = req.body.hasOwnProperty('token') ? req.body.token : -1;
+	var email = req.body.hasOwnProperty('email') ? req.body.email : -1;
+	var name = req.body.hasOwnProperty('name') ? req.body.name : -1;
+
+	// Check data
+	if (id === -1 || token === -1 || email === -1 || name === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.googleSignin', 'Parameter missing from call: ' + JSON.stringify(req.body));
+	else {
+
+		// Check if user already exists
+		return user.getByGoogleId(id, function (checkErr, checkUsr) {
+			if (checkErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.googleSignin', 'Error checking user: ' + JSON.stringify(checkErr));
+			else if (checkUsr) {
+
+				// Store new Google token
+				return user.updateGoogleToken(id, token, function (updErr, updRes) {
+					if (updErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.googleSignin', 'Error updating user token: ' + JSON.stringify(updErr));
+					else {
+
+						// User already exists, return auth token
+						return auth.generateUserToken(checkUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
+				});
+			} else {
+
+				// New user, store it
+				return user.newGoogleUser(id, token, email, name, function (newErr, newUsr) {
+					if (newErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.googleSignin', 'Error creating new user: ' + JSON.stringify(newErr));
+					else {
+
+						// User created, return auth token
+						return auth.generateUserToken(newUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
+				});
+			}
+		});
+	}
+};
+
+/** Twitter user signin
+ *  Check if given Twitter user exists, create it if missing, and return auth token
+ */
+module.exports.twitterSignin = function (req, res, next) {
+
+	// Get data from request
+	var id = req.body.hasOwnProperty('id') ? req.body.id : -1;
+	var token = req.body.hasOwnProperty('token') ? req.body.token : -1;
+	var username = req.body.hasOwnProperty('username') ? req.body.username : -1;
+	var displayName = req.body.hasOwnProperty('displayName') ? req.body.displayName : -1;
+
+	// Check data
+	if (id === -1 || token === -1 || username === -1 || displayName === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.twitterSignin', 'Parameter missing from call: ' + JSON.stringify(req.body));
+	else {
+
+		// Check if user already exists
+		return user.getByTwitterId(id, function (checkErr, checkUsr) {
+			if (checkErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.twitterSignin', 'Error checking user: ' + JSON.stringify(checkErr));
+			else if (checkUsr) {
+
+				// Store new Twitter token
+				return user.updateTwitterToken(id, token, function (updErr, updRes) {
+					if (updErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.twitterSignin', 'Error updating user token: ' + JSON.stringify(updErr));
+					else {
+
+						// User already exists, return auth token
+						return auth.generateUserToken(checkUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
+				});
+			} else {
+
+				// New user, store it
+				return user.newTwitterUser(id, token, username, displayName, function (newErr, newUsr) {
+					if (newErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.twitterSignin', 'Error creating new user: ' + JSON.stringify(newErr));
+					else {
+
+						// User created, return auth token
+						return auth.generateUserToken(newUsr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
 				});
 			}
 		});

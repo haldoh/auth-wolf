@@ -14,6 +14,10 @@ var router = require('express').Router();
 var auth = require('../controllers/auth');
 var users = require('../controllers/users');
 
+router.route('/me')
+	// GET - get data about the user token owner
+	.get(auth.checkApiToken, auth.checkUserToken, users.getTokenUser);	
+
 router.route('/:id')
 	// GET - get data about a user
 	.get(auth.checkApiToken, auth.checkUserToken, users.getUserById);

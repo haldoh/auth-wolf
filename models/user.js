@@ -122,3 +122,69 @@ module.exports.newTwitterUser = function (id, token, displayName, username, call
 	// Save user
 	newUser.save(callback);
 };
+
+// Update Facebook token
+module.exports.updateFacebookToken = function (id, token, callback) {
+
+	// Search parameters
+	var search = {
+		'facebook.id': id
+	};
+
+	// Update parameters
+	var update= {
+		$set: {
+			'facebook.token': token
+		}
+	};
+
+	// Options
+	var options = {};
+
+	// Update
+	User.update(search, update, options).exec(callback);
+};
+
+// Update Google token
+module.exports.updateGoogleToken = function (id, token, callback) {
+
+	// Search parameters
+	var search = {
+		'google.id': id
+	};
+
+	// Update parameters
+	var update= {
+		$set: {
+			'google.token': token
+		}
+	};
+
+	// Options
+	var options = {};
+
+	// Update
+	User.update(search, update, options).exec(callback);
+};
+
+// Update Twitter token
+module.exports.updateTwitterToken = function (id, token, callback) {
+
+	// Search parameters
+	var search = {
+		'twitter.id': id
+	};
+
+	// Update parameters
+	var update= {
+		$set: {
+			'twitter.token': token
+		}
+	};
+
+	// Options
+	var options = {};
+
+	// Update
+	User.update(search, update, options).exec(callback);
+};

@@ -29,39 +29,56 @@ router.route('/local/signup')
 	// POST - Create new user and get auth token
 	.post(auth.checkApiToken, users.newLocalUser);
 
+/* Facebook signin
+ */
+router.route('/facebook/signin')
+	.post(auth.checkApiToken, users.facebookSignin);
+
+/* Google signin
+ */
+router.route('/google/signin')
+	.post(auth.checkApiToken, users.googleSignin);
+
+/* Twitter signin
+ */
+router.route('/twitter/signin')
+	.post(auth.checkApiToken, users.twitterSignin);
+
+/*** TO BE MOVED/REMOVED ***/
+
 /* Facebook auth
 */
-router.route('/facebook')
+router.route('/tmp/facebook')
 // GET - Facebook authentication
 	.get(auth.facebookAuth);
 
-router.route('/facebook/callback')
+router.route('/tmp/facebook/callback')
 // GET - Facebook authentication callback
 	.get(auth.facebookAuthCallback, auth.extAuthRedirect);
 
 /* Google auth
 */
-router.route('/google')
+router.route('/tmp/google')
 // GET - Google authentication
 	.get(auth.googleAuth);
 
-router.route('/google/callback')
+router.route('/tmp/google/callback')
 // GET - Google authentication callback
 	.get(auth.googleAuthCallback, auth.extAuthRedirect);
 
 /* Twitter auth
 */
-router.route('/twitter')
+router.route('/tmp/twitter')
 // GET - Twitter authentication
 	.get(auth.twitterAuth);
 
-router.route('/twitter/callback')
+router.route('/tmp/twitter/callback')
 // GET - Twitter authentication callback
 	.get(auth.twitterAuthCallback, auth.extAuthRedirect);
 
 /* Session setup
  */
-router.route('/session_setup')
+router.route('/tmp/session_setup')
 	.post(auth.checkApiToken, auth.sessionSetup);
 
 /* Logout
