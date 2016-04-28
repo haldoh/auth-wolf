@@ -55,14 +55,14 @@ module.exports.getByTwitterId = function (id, callback) {
 };
 
 // Store a new user after local signup
-module.exports.newLocalUser = function (email, password, callback) {
+module.exports.newLocalUser = function (email, password, displayName, callback) {
 
 	// Create a new user
 	var newUser = new User();
 
 	// Store data in new user
 	newUser.email = email;
-	newUser.displayName = email.split('@')[0];
+	newUser.displayName = displayName ? displayName : email.split('@')[0];
 	newUser.password = newUser.generateHash(password);
 
 	// Save user

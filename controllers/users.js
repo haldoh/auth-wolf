@@ -106,7 +106,7 @@ module.exports.localAuth = function (req, res, next) {
 
 				// Check user password
 				if (!user.checkPassword(usr, password))
-					return error.send('401', '1', 'warn', res, 'controllers.user.localAuth', 'Given password does not match user: ' + email);
+					return error.send('400', '2', 'warn', res, 'controllers.user.localAuth', 'Given password does not match user: ' + email);
 				else {
 
 					// Return auth token
@@ -128,7 +128,7 @@ module.exports.newLocalUser = function (req, res, next) {
 	// Get data from request
 	var email = req.body.hasOwnProperty('email') ? req.body.email : -1;
 	var password = req.body.hasOwnProperty('password') ? req.body.password : -1;
-	var displayName = req.body.hasOwnProperty('name') ? req.body.name : email;
+	var displayName = req.body.hasOwnProperty('name') ? req.body.name : null;
 
 	// Check data
 	if (email === -1 || password === -1) {
@@ -136,17 +136,28 @@ module.exports.newLocalUser = function (req, res, next) {
 		return error.send('400', '1', 'warn', res, 'controllers.user.newLocalUser', 'Parameter missing from call: ' + JSON.stringify(req.body));
 	} else {
 
-		// Create user
-		return user.newLocalUser(email, password, displayName, function (usrErr, usr) {
-			if (usrErr)
-				return error.send('500', '1', 'error', res, 'controllers.user.newLocalUser', 'Error creating user : ' + JSON.stringify(usrErr));
-			else {
+		// Check if user already exists
+		return user.getByEmail(email, function (checkErr, checkUsr) {
 
-				// Return auth token
-				return auth.generateUserToken(usr, function (token) {
-					return res.send({
-						token: token
-					});
+			if (checkErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.newLocalUser', 'Error checking existing user: ' + JSON.stringify(checkErr));
+			else if (checkUsr)
+				return error.send('400', '2', 'error', res, 'controllers.user.newLocalUser', 'Email already in use.');
+			else {
+				// Create user
+				return user.newLocalUser(email, password, displayName, function (usrErr, usr) {
+
+					if (usrErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.newLocalUser', 'Error creating user : ' + JSON.stringify(usrErr));
+					else {
+
+						// Return auth token
+						return auth.generateUserToken(usr, function (token) {
+							return res.send({
+								token: token
+							});
+						});
+					}
 				});
 			}
 		});
