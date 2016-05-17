@@ -50,6 +50,49 @@ module.exports.getUserById = function (req, res, next) {
 	}
 };
 
+/** Get multiple users by ID
+ */
+module.exports.getMultiUserById = function (req, res, next) {
+
+	// Get IDs from request body
+	var userIds = req.body.hasOwnProperty('ids') ? req.body.ids : -1;
+
+	if (userIds === -1)
+		return error.send('400', '1', 'warn', res, 'controllers.user.getMultiUserById', 'Parameter missing from call: ' + JSON.stringify(req.params));
+	else {
+
+		// Parse IDs
+		var parsedUserIds = userIds.split(',');
+
+		// Retrieve user
+		return user.getMultiUserById(parsedUserIds, function (usrErr, usrs) {
+			if (usrErr)
+				return error.send('500', '1', 'error', res, 'controllers.user.getMultiUserById', 'Error retrieving users from DB : ' + JSON.stringify(usrErr));
+			else if (!usrs)
+				return error.send('404', '1', 'warn', res, 'controllers.user.getMultiUserById', 'no users not found: ' + userId);
+			else {
+
+				var result = [];
+
+				for (var i = 0; i < usrs.length; i += 1) {
+
+					// Turn to normal JSON
+					var resUser = usrs[i].toObject();
+
+					// Passowrd digest is not needed
+					delete resUser.password;
+
+					// Push user in result array
+					result.push(resUser);
+				}
+
+				// Return users
+				return res.send(result);
+			}
+		});
+	}
+};
+
 /** Get a user by its auth token
  */
 module.exports.getTokenUser = function (req, res, next) {

@@ -22,4 +22,8 @@ router.route('/:id')
 	// GET - get data about a user
 	.get(auth.checkApiToken, auth.checkUserToken, users.getUserById);
 
+router.route('/list')
+	// POST - list users given a list of IDs
+	.post(auth.checkApiToken, auth.checkUserToken, users.getMultiUserById);
+
 module.exports = router;

@@ -21,6 +21,15 @@ module.exports.getById = function (id, callback) {
 	User.findById(id, callback);
 };
 
+// Get multiple user based on IDs
+module.exports.getMultiUserById = function (ids, callback) {
+	User.find({
+		_id: {
+			$in: ids
+		}
+	}, callback);
+};
+
 // Get a user based on its email
 module.exports.getByEmail = function (email, callback) {
 	User.findOne({
