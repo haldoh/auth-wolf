@@ -12,6 +12,7 @@
 // Requires
 var user = require('../models/user');
 var auth = require('../models/auth');
+var facebook = require('../models/facebook');
 
 var error = require('../config/error');
 var logger = require('../config/logger');
@@ -69,7 +70,7 @@ module.exports.getMultiUserById = function (req, res, next) {
 			if (usrErr)
 				return error.send('500', '1', 'error', res, 'controllers.user.getMultiUserById', 'Error retrieving users from DB : ' + JSON.stringify(usrErr));
 			else if (!usrs)
-				return error.send('404', '1', 'warn', res, 'controllers.user.getMultiUserById', 'no users not found: ' + userId);
+				return error.send('404', '1', 'warn', res, 'controllers.user.getMultiUserById', 'No users found.');
 			else {
 
 				var result = [];
@@ -223,39 +224,49 @@ module.exports.facebookSignin = function (req, res, next) {
 		return error.send('400', '1', 'warn', res, 'controllers.user.facebookSignin', 'Parameter missing from call: ' + JSON.stringify(req.body));
 	else {
 
-		// Check if user already exists
-		return user.getByFacebookId(id, function (checkErr, checkUsr) {
-			if (checkErr)
-				return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error checking user: ' + JSON.stringify(checkErr));
-			else if (checkUsr) {
+		// Check Facebook token
+		return facebook.checkTokenValidity(token, id, function (validErr, valid) {
+			if (validErr)
+				return error.send('500', '1', 'debug', res, 'controllers.user.facebookSignin', 'Error checking token validity: ' + validErr);
+			else if (!valid)
+				return error.send('401', '3', 'debug', res, 'controllers.user.facebookSignin', 'Facebook token failed to validate.');
+			else {
 
-				// Store new Facebook token
-				return user.updateFacebookToken(id, token, function (updErr, updRes) {
-					if (updErr)
-						return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error updating user token: ' + JSON.stringify(updErr));
-					else {
+				// Check if user already exists
+				return user.getByFacebookId(id, function (checkErr, checkUsr) {
+					if (checkErr)
+						return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error checking user: ' + JSON.stringify(checkErr));
+					else if (checkUsr) {
 
-						// User already exists, return auth token
-						return auth.generateUserToken(checkUsr, function (token) {
-							return res.send({
-								token: token
-							});
+						// Store new Facebook token
+						return user.updateFacebookToken(id, token, function (updErr, updRes) {
+							if (updErr)
+								return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error updating user token: ' + JSON.stringify(updErr));
+							else {
+
+								// User already exists, return auth token
+								return auth.generateUserToken(checkUsr, function (token) {
+									return res.send({
+										token: token
+									});
+								});
+							}
 						});
-					}
-				});
-			} else {
+					} else {
 
-				// New user, store it
-				return user.newFacebookUser(id, token, email, name, function (newErr, newUsr) {
-					if (newErr)
-						return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error creating new user: ' + JSON.stringify(newErr));
-					else {
+						// New user, store it
+						return user.newFacebookUser(id, token, email, name, function (newErr, newUsr) {
+							if (newErr)
+								return error.send('500', '1', 'error', res, 'controllers.user.facebookSignin', 'Error creating new user: ' + JSON.stringify(newErr));
+							else {
 
-						// User created, return auth token
-						return auth.generateUserToken(newUsr, function (token) {
-							return res.send({
-								token: token
-							});
+								// User created, return auth token
+								return auth.generateUserToken(newUsr, function (token) {
+									return res.send({
+										token: token
+									});
+								});
+							}
 						});
 					}
 				});
